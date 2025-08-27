@@ -1,0 +1,11 @@
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+umap-learn
+openpyxl
+h5py
+scipy
+librosa
+soundfile
