@@ -206,9 +206,9 @@ def save_pairwise_plots(df, out_dir):
 
 # ----------------- MAIN (une seule entrée) -----------------
 
-def main(csv_path, n_clusters=4, T=180.0, bins=180, bandwidth=1.5, random_state=42):
+def main(csv_path, n_clusters=4, T=180.0, bins=180, bandwidth=1.5, random_state=42, out_dir="plots"):
     base = os.path.splitext(os.path.basename(csv_path))[0]
-    out_root = os.path.join("plots", base)
+    out_root = os.path.join(out_dir, base)
     os.makedirs(out_root, exist_ok=True)
 
     df = read_csv_simple(csv_path)
@@ -247,4 +247,4 @@ if __name__ == "__main__":
     else:
         for f in csv_files:
             print(f"\n=== Traitement de {f} ===")
-            main(f)
+            main(f, out_dir="plots/forced_swim")
