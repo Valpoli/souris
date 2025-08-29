@@ -155,13 +155,18 @@ def _cluster_colors(n):
     return [cmap(i / (N - 1)) for i in range(n)]
 
 def plot_umap_and_pca_per_day(df, group, out_dir, n_neighbors=15, min_dist=0.1):
+    print(f"------------------------")
+    print(group)
+    print(df.head())
     os.makedirs(out_dir, exist_ok=True)
     days = sorted(df["day"].unique())
     n_clusters = int(df["cluster"].max()) + 1
     colors = _cluster_colors(n_clusters)
 
     for day in days:
+        print(day)
         d = df[df["day"] == day]
+        print(d.head())
         X = _build_features(d)
         Xs = StandardScaler().fit_transform(X)
 
@@ -181,7 +186,7 @@ def plot_umap_and_pca_per_day(df, group, out_dir, n_neighbors=15, min_dist=0.1):
 
         # UMAP (si dispo)
         if HAS_UMAP:
-            reducer = umap.UMAP(n_neighbors=n_neighbors, min_dist=min_dist, random_state=0)
+            reducer = umap.UMAP(n_neighbors=n_neighbors, min_dist=min_dist, random_state=42)
             Zu = reducer.fit_transform(Xs)
             plt.figure(figsize=(6,5))
             for k in range(n_clusters):
@@ -196,7 +201,7 @@ def plot_umap_and_pca_per_day(df, group, out_dir, n_neighbors=15, min_dist=0.1):
             warnings.warn("umap-learn non installé : UMAP ignoré pour " + f"{group} {day}")
 
 def _density_series(times_s, T=180.0, bins=180, bandwidth=1.5):
-    """
+    """aprl
     Retourne (grid, density) sur [0,T].
     - Par défaut KDE (KernelDensity) si >= 2 points, sinon histogramme lissé léger.
     - bandwidth ~ échelle secondes.
@@ -344,12 +349,12 @@ process_two_csvs(
     bandwidth=1.5
 )
 
-process_two_csvs(
-    nms_csv_path="unsup_NMS.csv",
-    ctrl_csv_path="unsup_CTRL.csv",
-    out_root="plots/unsup",     # <- dossier de sortie pour la méthode KMeans
-    n_clusters=2,
-    T=180.0,
-    bins=180,
-    bandwidth=1.5
-)
+# process_two_csvs(
+#     nms_csv_path="unsup_NMS.csv",
+#     ctrl_csv_path="unsup_CTRL.csv",
+#     out_root="plots/unsup",     # <- dossier de sortie pour la méthode KMeans
+#     n_clusters=2,
+#     T=180.0,
+#     bins=180,
+#     bandwidth=1.5
+# )
